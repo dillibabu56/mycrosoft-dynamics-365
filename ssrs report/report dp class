@@ -1,0 +1,39 @@
+
+[SRSReportParameterAttribute(classStr(SSS_DB_empreport_contract_class))] 
+class SSS_DB_empreport_dp  extends SRSReportDataProviderBase
+{
+    SSS_DB_empreport_contract_class contractclass;
+    SSS_DB_temptable temptable;
+    SSS_DB_empid empid;
+    SSS_DB_emp_detailtable detailtable;
+    SSS_DB_emptable emptable;
+    str empid
+
+    [SRSReportDataSetAttribute(tableStr('SSS_DB_temptable'))]
+    public SSS_DB_temptable getTmp()
+    {
+        select temptable;
+        return temptable;
+    }
+
+    public void processReport()
+    {
+        contractclass = this.parmDataContract();
+        empid = contractclass.parmempid();
+        
+      select emptable 
+            where emptable.empid == empid;
+           
+        {
+            ttsbegin;
+            temptable.empid         = emptable.empid;
+            temptable.Name          = emptable.Name;
+            temptable.gender        = emptable.gender;
+            temptable.salary        = detailtable.salary;
+            temptable.age           = emptable.age;
+            temptable.insert();
+            ttscommit;
+        }
+    }
+
+}
