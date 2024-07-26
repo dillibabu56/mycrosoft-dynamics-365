@@ -1,0 +1,62 @@
+
+class sss_db_sysoperation_controller extends SysOperationServiceController
+{
+    protected void new()
+    {
+        super(classStr(sss_db_sysoperation_service),
+            methodStr(sss_db_sysoperation_service, process),
+            SysOperationExecutionMode::Synchronous);
+    }
+
+    public ClassDescription defaultCaption()
+    {
+        return "Process Job";
+    }
+
+    public static sss_db_sysoperation_controller construct(SysOperationExecutionMode _executionMode = SysOperationExecutionMode::Synchronous)
+    {
+        sss_db_sysoperation_controller controller;
+        controller = new sss_db_sysoperation_controller();
+        controller.parmExecutionMode(_executionMode);
+        return controller;
+    }
+
+    public static void main(Args _args)
+    {
+        sss_db_sysoperation_controller controller;
+        controller = sss_db_sysoperation_controller::construct();
+        controller.parmArgs(_args);
+        controller.startOperation();
+    }
+
+}
+
+class sss_db_sysoperation_service extends sysoperationservicebase
+{
+    public void process(sss_db_sysoperation_cotract _contract)
+    {
+        sss_db_batchjob_Table batchjobtable;
+        int retentionDays = _contract.parmRetentionDays();
+        ttsbegin;
+        delete_from batchjobtable where batchjobtable.batchid == retentionDays;
+        ttscommit;
+        Info(strFmt("batchid : %1 has deleted successfully", retentionDays));
+    }
+}
+
+[DataContractAttribute]
+class sss_db_sysoperation_cotract
+{
+    private int retentionDays;
+
+    [DataMember,
+SysOperationLabel(literalStr("Retention days")),
+SysOperationHelpText(literalStr("Data older than the retention days will be cleaned up.")),
+        SysOperationDisplayOrder('1')]
+    public int parmRetentionDays(int _retentionDays = retentionDays)
+    {
+        retentionDays = _retentionDays;
+        return retentionDays;
+    }
+
+}
