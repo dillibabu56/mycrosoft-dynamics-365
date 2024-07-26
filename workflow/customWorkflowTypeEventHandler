@@ -1,0 +1,47 @@
+
+/// <summary>
+/// The sss_db_customWorkflowTypeEventHandler workflow event handler.
+/// </summary>
+public class  sss_db_customWorkflowTypeEventHandler implements WorkflowCanceledEventHandler,  
+	WorkflowCompletedEventHandler,
+	WorkflowStartedEventHandler
+    
+{
+    
+           public void started(WorkflowEventArgs _workflowEventArgs)
+    
+           {
+    
+                 // TODO:  Write code to execute once the workflow is started.
+    
+            sss_db_CustomWorkflow_Table::updateWorkflowStatus(_workflowEventArgs.parmWorkflowContext().parmRecId(),sss_db_CustomWorkflow_BaseEnum::Submitted);
+    
+           }
+    
+     
+    
+           public void canceled(WorkflowEventArgs _workflowEventArgs)
+    
+           {
+    
+                 // TODO:  Write code to execute once the workflow is canceled.
+    
+            sss_db_CustomWorkflow_Table::updateWorkflowStatus(_workflowEventArgs.parmWorkflowContext().parmRecId(),sss_db_CustomWorkflow_BaseEnum::Rejected);
+    
+           }
+    
+     
+    
+           public void completed(WorkflowEventArgs _workflowEventArgs)
+    
+           {
+    
+                 // TODO:  Write code to execute once the workflow is completed.
+    
+    sss_db_CustomWorkflow_Table::updateWorkflowStatus(_workflowEventArgs.parmWorkflowContext().parmRecId(), sss_db_CustomWorkflow_BaseEnum::Approved);
+    
+           }
+
+ 
+
+}// change the table name and baseenum name in every class
