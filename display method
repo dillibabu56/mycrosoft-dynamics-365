@@ -1,0 +1,19 @@
+
+[ExtensionOf(tableStr(CustTable))]
+final class custtable_table_extension
+{
+    public  display int sales()
+    {
+        custtable custtable;
+        SalesTable salestable;
+        int total;
+        //FormDataSource custtable_ds = this;
+        //CustTable custtable = custtable_ds.cursor();
+
+        select count(RecId) from salestable
+        where salestable.CustAccount == this.AccountNum;
+        total = salestable.RecId;
+        this.salesorderincustomer = total;
+        return Total;
+    }
+}
