@@ -1,0 +1,40 @@
+/// <summary>
+/// The sss_db_customWorkflowApprovalEventHandler workflow outcome event handler.
+/// </summary>
+public final class sss_db_customWorkflowApprovalEventHandler implements WorkflowElementCanceledEventHandler,
+	WorkflowElementCompletedEventHandler,
+	WorkflowElementStartedEventHandler
+{
+    public void started(WorkflowElementEventArgs _workflowElementEventArgs)
+
+    {
+
+        // TODO:  Write code to execute once the workflow is started.
+
+    }
+
+ 
+
+    public void canceled(WorkflowElementEventArgs _workflowElementEventArgs)
+
+    {
+
+        // TODO:  Write code to execute once the workflow is canceled.
+
+        sss_db_CustomWorkflow_Table::updateWorkflowStatus(_workflowElementEventArgs.parmWorkflowContext().parmRecId(), sss_db_CustomWorkflow_BaseEnum::Rejected);
+
+    }
+
+ 
+
+    public void completed(WorkflowElementEventArgs _workflowElementEventArgs)
+
+    {
+
+        // TODO:  Write code to execute once the workflow is completed.
+
+        sss_db_CustomWorkflow_Table::updateWorkflowStatus(_workflowElementEventArgs.parmWorkflowContext().parmRecId(), sss_db_CustomWorkflow_BaseEnum::Approved);
+
+    }
+
+}
