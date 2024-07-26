@@ -1,0 +1,11 @@
+flow of workflow:
+	create one base enum with 4 fields (approved,submited,requested,cancle)
+	create table with 3 field (id, name, then enum with the base enum)
+	medify the cansubmittoworkflow method, create update workflowstatus
+	create form and map the datasource table and set the enum allow edit false 
+	create the simple query and build the project 
+	then create the workflow category 
+	then create the workflow type 
+	then create the workflow approve
+	finnaly create new element in workflow type and set the lble workflowtype
+	set the workflow yes in form properties and et the workflow type to your workflow type
