@@ -1,0 +1,68 @@
+public class sss_db_customworkflow_Table extends common
+{
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name = "_workflowType"></param>
+    /// <returns></returns>
+    public boolean canSubmitToWorkflow(str _workflowType = '')
+    {
+        boolean ret;
+    
+        ret = super(_workflowType);
+    
+        if(this.CustomWorkflowBaseEnum != sss_db_CustomWorkflow_BaseEnum::Approved) // CustomWorkflowBaseEnum field name , sss_db_CustomWorkflow_BaseEnum
+
+        {
+
+            ret = true;
+
+        }
+
+        else
+
+        {
+
+            ret = false;
+
+        }
+
+   
+
+        return ret;
+
+    }
+
+    public static void  updateWorkflowStatus(RefRecId recId , CustomWorkflowBaseEnum status)
+
+    {
+
+        sss_db_customworkflow_Table sss_db_customworkflow_Table; // workflowtable buffer
+
+ 
+
+        ttsbegin;
+
+ 
+
+        select forupdate sss_db_customworkflow_Table
+
+            where sss_db_customworkflow_Table.RecId == recId;
+
+ 
+
+        sss_db_customworkflow_Table.CustomWorkflowBaseEnum = status;
+
+ 
+
+        sss_db_customworkflow_Table.update();
+
+ 
+
+        ttscommit;
+
+ 
+
+    }
+
+}
