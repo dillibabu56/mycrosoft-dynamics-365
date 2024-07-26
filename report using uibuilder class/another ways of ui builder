@@ -1,0 +1,43 @@
+
+class SSS_DB_report_uibuilder_class extends SysOperationAutomaticUIBuilder
+{
+    SSS_DB_empreport_contract_class contract;
+    DialogField empid;
+
+
+    private void EmpIdLookup(FormStringControl _control)
+    {
+        Query       query;
+        container   conEmpId;
+        query = new Query(queryStr(SSS_DB_reportquery));
+        SysLookupMultiSelectGrid::lookup(query, _control, _control, _control, conEmpId);
+    }
+    public void build()
+    {
+        contract    = this.dataContractObject() as SSS_DB_empreport_contract_class;
+
+        empid  = this.addDialogField(methodStr(SSS_DB_empreport_contract_class, parmempid),contract);
+
+    }
+
+    public void postBuild()
+    {
+        super();
+        contract = this.dataContractObject() as SSS_DB_empreport_contract_class;
+
+        empid = this.bindInfo().getDialogField(contract,methodStr(SSS_DB_empreport_contract_class, parmempid));
+
+        empid.registerOverrideMethod(methodStr(FormStringControl, lookup),
+        methodStr(SSS_DB_report_uibuilder_class, EmpIdLookup),this);
+
+        if (empid)
+        {
+            empid.lookupButton(1);
+        }
+    }
+
+    public void postRun()
+    {
+      //super();
+    }
+}
