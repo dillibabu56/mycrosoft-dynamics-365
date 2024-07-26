@@ -1,0 +1,14 @@
+
+[DataContractAttribute]
+class SSS_DB_empreport_contract_class
+{
+    SSS_DB_empid empid;
+
+    [DataMemberAttribute("Emp ID")]
+    public SSS_DB_empid parmempid(SSS_DB_empid _empid = empid)
+    {
+        empid = _empid;
+        return empid;
+    }
+
+}
