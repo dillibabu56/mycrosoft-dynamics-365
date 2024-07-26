@@ -1,0 +1,125 @@
+
+
+/// <summary
+
+/// The CustomWorkflowTypeSubmitManager menu item action event handler.
+
+/// </summary>
+
+public class CustomWorkflowTypeSubmitManager
+
+{
+
+    public static void main(Args args)
+
+       {
+
+             //  TODO:  Write code to execute once a work item is submitted.
+
+ 
+
+        CustomWorkflowTable     customWorkflowTable;
+
+        WorkflowComment         note = "";
+
+        WorkflowSubmitDialog    workflowSubmitDialog;
+
+        WorkflowCorrelationId   workflowCorrelationId;
+
+        WorkflowTypeName        workflowTypeName = workFlowTypeStr("CustomWorkflowType");
+
+ 
+
+ 
+
+ 
+
+        //Opens the submit to workflow dialog.
+
+ 
+
+workflowSubmitDialog =    WorkflowSubmitDialog::construct(args.caller().getActiveWorkflowConfiguration());
+
+ 
+
+        workflowSubmitDialog.run();
+
+ 
+
+        if (workflowSubmitDialog.parmIsClosedOK())
+
+        {
+
+ 
+
+            customWorkflowTable = args.record();
+
+ 
+
+            // Get comments from the submit to workflow dialog.
+
+ 
+
+            note = workflowSubmitDialog.parmWorkflowComment();
+
+ 
+
+            try
+
+            {
+
+ 
+
+                ttsbegin;
+
+ 
+
+workflowCorrelationId = Workflow::activateFromWorkflowType(workflowTypeName, customWorkflowTable.RecId, note, NoYes::No);
+
+ 
+
+                customWorkflowTable.CustomWorkflowBaseEnum = CustomWorkflowBaseEnum::Submitted;
+
+ 
+
+                customWorkflowTable.update();
+
+ 
+
+                ttscommit;
+
+ 
+
+                // Send an Infolog message.
+
+ 
+
+                info("Submitted to workflow.");
+
+            }
+
+ 
+
+            catch (Exception::Error)
+
+            {
+
+ 
+
+                error("Error on workflow activation.");
+
+            }
+
+        }
+
+ 
+
+        args.caller().updateWorkFlowControls();
+
+ 
+
+       }
+
+ 
+
+}
