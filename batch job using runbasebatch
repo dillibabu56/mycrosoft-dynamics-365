@@ -1,0 +1,100 @@
+
+class sss_db_batchjob_Class extends RunBasebatch
+{
+    // Parameters for the batch job
+    str description;
+    int64 numRecords;
+
+    // Dialog controls
+    DialogField dialogDescription;
+    DialogField dialogNumRecords;
+
+    //macros 
+    #define.classstr(classstr)
+
+    // Constructor
+    public void new()
+    {
+        super();
+        description = "";
+        numRecords = 0;
+    }
+
+    // Main method to run the batch job
+
+    public static void main(Args args)
+    {
+        sss_db_batchjob_Class sss_db_batchjob_Class = new sss_db_batchjob_Class();
+        sss_db_batchjob_Class.parmInBatch(true);
+
+        if (sss_db_batchjob_Class.prompt())
+            sss_db_batchjob_Class.run();
+    }
+    public void run()
+    {
+        sss_db_batchjob_Table demoBatchTable;
+
+        ttsBegin;
+
+        for (int64 i = 1; i <= numRecords; i++)
+        {
+            demoBatchTable.clear();
+            demoBatchTable.BatchId = i;
+            demoBatchTable.discription = description;
+            demoBatchTable.insert();
+        }
+
+        ttsCommit;
+
+        info(strfmt("%1 records inserted successfully.", numRecords));
+    }
+
+    #define.CurrentVersion(1)
+    #define.ClassName('sss_db_batchjob_Class')
+    #define.ClassStr(#ClassName)
+    // Pack method
+    public container pack()
+    {
+        return [#classstr, description, numRecords];
+    }
+
+    // Unpack method
+    public boolean unpack(container packedClass)
+    {
+        
+        Version version = runbase::getVersion(packedClass);
+        switch (version)
+        {
+            case 1:
+                [version, description, numRecords] = packedClass;
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+    }
+    
+
+    // Show the dialog
+    public Object dialog()
+    {
+        DialogRunBase dialog = super();
+
+        dialogDescription = dialog.addField(extendedTypeStr(sss_db_discription_String),Description);
+        dialogNumRecords = dialog.addField(extendedTypeStr(sss_db_batchjobInteger64));
+
+        return dialog;
+    }
+
+    // Validate the dialog
+    public boolean getFromDialog()
+    {
+        description = dialogDescription.value();
+        numRecords = dialogNumRecords.value();
+
+        return true;
+    }
+
+
+}
