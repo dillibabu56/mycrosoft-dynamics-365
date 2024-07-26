@@ -1,0 +1,53 @@
+
+
+[Form]
+public class sss_db_simplelist_form extends FormRun
+{
+
+    [DataSource]
+    class sss_db_simplelist_table
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        public void executeQuery()
+        {
+            QueryBuildDataSource  queryBuildDataSource;
+            ssss_db_gender sss_gender;
+            queryBuildDataSource = this.query().dataSourceTable(tablenum(sss_db_simplelist_table));
+            if (filter.selection() == ssss_db_gender::all)
+            {
+                queryBuildDataSource.clearRanges();          
+            }
+            else
+            {
+                queryBuildDataSource.clearRanges();
+                queryBuildDataSource.addRange(fieldnum(sss_db_simplelist_table , gender)).value(queryValue(filter.selection()));
+                super();
+            }
+        }
+    }
+
+        [Control("ComboBox")]
+    class filter
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public int selectionChange()
+        {
+            int ret;
+        
+            ret = super();
+
+           sss_db_simplelist_table_ds.executeQuery();
+        
+            return ret;
+        }
+
+    }
+
+
+
+}
