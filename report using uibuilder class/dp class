@@ -1,0 +1,55 @@
+
+[SRSReportParameterAttribute(classStr(SSS_DB_empreport_contract_class))] 
+class SSS_DB_empreport_dp  extends SRSReportDataProviderBase
+{
+    ListEnumerator             EmpListIterator;
+
+    SSS_DB_empreport_contract_class contract;
+    SSS_DB_temptable temptable;
+    List empid;
+    SSS_DB_emp_detailtable detailtable;
+    SSS_DB_emptable emptable;
+
+    [SRSReportDataSetAttribute(tableStr('SSS_DB_temptable'))]
+    public SSS_DB_temptable getTmp()
+    {
+        select temptable;
+        return temptable;
+    }
+
+    public void processReport()
+    {
+        List            list = new List(Types::String);
+        Query                           queryempId;
+        QueryRun                        queryRunempId;
+        SSS_DB_emptable                 SSS_DB_emptable;
+        QueryBuildDataSource            qbdsempId;
+        ListIterator                    empidListIterator;
+
+        contract = this.parmDataContract() as SSS_DB_empreport_contract_class;
+        list = contract.parmempid();
+        if(list != null)
+        {
+            empidListIterator  = new ListIterator(List);
+            queryempId = new Query(queryStr(SSS_DB_reportquery));
+            qbdsempId = queryempId.dataSourceTable(tableNum(SSS_DB_emptable));
+            while(empidListIterator.more())
+            {
+                qbdsempId.addRange(
+                fieldNum(SSS_DB_emptable, empid)).value(empidListIterator.value());
+                empidListIterator.next();
+            }
+            queryRunempId = new QueryRun(queryempId);
+            while(queryRunempId.next())
+            {
+                SSS_DB_emptable = queryRunempId.get(tableNum(SSS_DB_emptable));
+                temptable.empid         = emptable.empid;
+                temptable.Name          = emptable.Name;
+                temptable.age           = emptable.age;
+                temptable.insert();
+            }
+        }
+    }
+
+
+}
