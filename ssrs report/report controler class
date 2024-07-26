@@ -1,0 +1,33 @@
+
+
+class SSS_DB_empreport_controller extends SrsReportRunController
+{
+
+    public static SSS_DB_empreport_controller construct()
+    {
+        return new SSS_DB_empreport_controller();
+    }
+   protected void prePromptModifyContract()
+
+    {
+       SSS_DB_emptable customerTable;
+
+        SSS_DB_empreport_contract_class contract;
+
+        SSS_DB_empid custGroup;
+
+        customerTable  = this.parmArgs().record();
+        contract = this.ParmReportContract().parmRdpContract();
+
+        contract.parmempid(customerTable.empid);
+    }
+    public static void main(Args _args)
+    {
+        SSS_DB_empreport_controller controller = new SSS_DB_empreport_controller();
+
+        controller.parmReportName(ssrsReportStr(SSS_DB_empreport_contract_class, PrecisionDesign1));
+        controller.parmArgs(_args);
+        controller.parmShowDialog(false);
+        controller.startOperation();
+    }
+}
