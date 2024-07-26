@@ -1,0 +1,33 @@
+public class numbersequenceclass extends NumberSeqApplicationModule
+{
+    protected void loadModule()
+    {
+        NumberSeqDatatype datatype = NumberSeqDatatype::construct();
+
+        datatype.parmDatatypeId(extendedTypeNum(SSS_DB_numberseqemp_edt));
+        datatype.parmReferenceHelp(literalStr("Unique key used for the cars."));
+        datatype.parmWizardIsContinuous(false);
+        datatype.parmWizardIsManual(NoYes::No);
+        datatype.parmWizardFetchAheadQty(10);
+        datatype.parmWizardIsChangeDownAllowed(NoYes::No);
+        datatype.parmWizardIsChangeUpAllowed(NoYes::No);
+        datatype.parmSortField(1);
+
+        datatype.addParameterType(NumberSeqParameterType::DataArea, true, false);
+        this.create(datatype);
+    }
+
+    public NumberSeqModule numberSeqModule()
+    {
+        return NumberSeqModule::vend;
+    }
+
+    [SubscribesTo(classstr(NumberSeqGlobal),delegatestr(NumberSeqGlobal,buildModulesMapDelegate))]
+    static void buildModulesMapSubsciber(Map numberSeqModuleNamesMap)
+    {
+        NumberSeqGlobal::addModuleToMap(classnum(numbersequenceclass), numberSeqModuleNamesMap);
+    }
+
+}
+
+// change the table name and edt name of yours.
